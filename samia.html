@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>student_details</title>
+</head>
+    <body>
+        <h1>Student details and Attendance average</h1>
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+    <script>	
+	
+	var account;
+	window.addEventListener('load', async () => {
+
+	
+		if (typeof window.ethereum !== 'undefined') { 
+			console.log("MetaMask is Available :) !"); 
+			}
+			
+		// Modern DApp browsers
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			
+			// To prevent the page reloading when the MetaMask network changes
+			ethereum.autoRefreshOnNetworkChange = false;
+			
+			// To Capture the account details from MetaMask
+			const accounts = await ethereum.enable();
+			account = accounts[0];
+				
+			}
+		// Legacy DApp browsers
+		else if (window.web3) {
+			//window.web3 = new Web3(web3.currentProvider);
+			window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/cbd9dc11b30147e9a2cc974be655ef7c")); 
+			}
+		// Non-DApp browsers
+		else {
+			console.log('Non-Ethereum browser detected. Please install MetaMask');
+			}
+			
+			});
+    </script>			
+
+        <h3>stu_details:</h3>
+		<br>
+    <form>
+		<table style="width:25%"> 
+            <tr>
+			<td>Id:</td>
+			<td><input type="text" id="id1" name="id1"></td>
+		  </tr>
+            <tr>
+			<td>Name:</td>
+			<td><input type="text" id="name1" name="name1"></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Attandance Subject 1:</td>
+			<td><input type="text" id="sub1_attnd" name="sub1_attnd"></td>
+		  </tr>
+		  <tr>
+			<td>Attandance Subject 2:</td>
+			<td><input type="text" id="sub2_attnd" name="sub2_attnd"></td>
+		  </tr>
+		  <tr>
+			<td>Attandance Subject 3:</td>
+			<td><input type="text" id="sub3_attnd" name="sub3_attnd"></td>
+		  </tr>
+            
+		  <tr>
+		  <td><input type="button" onclick="add_details()" value="Add Details"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result"></div></a></h4> 
+	</form>
+        <h3>show_details:</h3>
+        <form>
+		<table style="width:25%">
+		<tr>
+			<td> Enter Id:</td>
+			<td><input type="text" id="id1" name="id1"></td>
+		  </tr>
+		  <tr><td><input type="button" onclick="get_details()" value="Get Details"></td></tr>
+		  <tr>
+			<td>Name:</td>
+			<td><b><div id="get_name"></b></td>
+		  </tr>
+            <tr>
+			<td>Id:</td>
+			<td><b><div id="get_id"></b></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Attandance Subject 1:</td>
+			<td><b><div id="get_sub1"></b></td>
+		  </tr>
+		  <tr>
+			<td>Attandance Subject 2:</td>
+			<td><b><div id="get_sub2"></b></td>
+		  </tr>
+		  <tr>
+			<td>Attandance Subject 3:</td>
+			<td><b><div id="get_sub3"></b></td>
+		  </tr>
+		</table>
+        </form>     
+        <h3>show_avg:</h3>
+        <form>
+		<table style="width:25%">
+		  <tr>
+			<td>Name:</td>
+			<td><b><div id="get_name"></b></td>
+		  </tr>
+		  <tr>
+			<td>Id:</td>
+			<td><b><div id="get_id"></b></td>
+		  </tr>
+		  <tr>
+			<td>avg_attnd:</td>
+			<td><b><div id="get_avg"></b></td>
+		  </tr>
+		  </table>
+        </form> 
+    </body>
+</html>
