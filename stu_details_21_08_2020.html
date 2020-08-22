@@ -1,0 +1,258 @@
+<html>
+<head>
+<title>student_details</title>
+</head>
+    <body>
+        <h1>Student details and Attendance average</h1>
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+    <script>	
+	
+	var account;
+	window.addEventListener('load', async () => {
+
+	
+		if (typeof window.ethereum !== 'undefined') { 
+			console.log("MetaMask is Available :) !"); 
+			}
+			
+		// Modern DApp browsers
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			
+			// To prevent the page reloading when the MetaMask network changes
+			ethereum.autoRefreshOnNetworkChange = false;
+			
+			// To Capture the account details from MetaMask
+			const accounts = await ethereum.enable();
+			account = accounts[0];
+				
+			}
+		// Legacy DApp browsers
+		else if (window.web3) {
+			//window.web3 = new Web3(web3.currentProvider);
+			window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/cbd9dc11b30147e9a2cc974be655ef7c")); 
+			}
+		// Non-DApp browsers
+		else {
+			console.log('Non-Ethereum browser detected. Please install MetaMask');
+			}
+			
+			});
+    	
+        var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint160",
+				"name": "s1",
+				"type": "uint160"
+			},
+			{
+				"internalType": "uint160",
+				"name": "s2",
+				"type": "uint160"
+			},
+			{
+				"internalType": "uint160",
+				"name": "s3",
+				"type": "uint160"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "id",
+				"type": "string"
+			}
+		],
+		"name": "stu_details",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "show_avg",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "show_details",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			},
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			},
+			{
+				"internalType": "uint160",
+				"name": "",
+				"type": "uint160"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+        var contractaddress = '0xD4e13e640fC7626b683993A83cFd86d4a2F04358';
+        function add_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            var id = document.getElementById("id1").value;
+            var name = document.getElementById("name1").value;
+            var sub1 = document.getElementById("sub1_attnd").value;
+            var sub2 = document.getElementById("sub2_attnd").value;
+            var sub3 = document.getElementById("sub3_attnd").value;
+            
+             var result = myContract.methods.stu_details(sub1, sub2, sub3,name,id).send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result").innerHTML = result; }
+               
+                });
+        }
+        function get_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.show_details().call(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { 
+                    document.getElementById("get_name").innerHTML = result[0]; 
+                     document.getElementById("get_id").innerHTML = result[1];
+                     document.getElementById("get_sub1").innerHTML = result[2];
+                     document.getElementById("get_sub2").innerHTML = result[3];
+                     document.getElementById("get_sub3").innerHTML = result[4];
+                }
+               
+                });
+        }
+        function get_avg() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.show_avg().call(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { 
+                    document.getElementById("get_name1").innerHTML = result[0]; 
+                     document.getElementById("get_id1").innerHTML = result[1];
+                     document.getElementById("get_avg").innerHTML = result[2];
+                }
+               
+                });
+        }
+        </script>
+
+        <h3>Student Details:</h3>
+		<br>
+    <form>
+		<table style="width:25%"> 
+            <tr>
+			<td>Id:</td>
+			<td><input type="text" id="id1" name="id1"></td>
+		  </tr>
+            <tr>
+			<td>Name:</td>
+			<td><input type="text" id="name1" name="name1"></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Attendance Subject 1:</td>
+			<td><input type="text" id="sub1_attnd" name="sub1_attnd"></td>
+		  </tr>
+		  <tr>
+			<td>Attendance Subject 2:</td>
+			<td><input type="text" id="sub2_attnd" name="sub2_attnd"></td>
+		  </tr>
+		  <tr>
+			<td>Attendance Subject 3:</td>
+			<td><input type="text" id="sub3_attnd" name="sub3_attnd"></td>
+		  </tr>
+            
+		  <tr>
+		  <td><input type="button" onclick="add_details()" value="Add Details"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result"></div></a></h4> 
+	</form>
+        <h3>Show Student details:</h3>
+        <form>
+		<table style="width:25%">
+		  <tr><td><input type="button" onclick="get_details()" value="Get Details"></td></tr>
+		  <tr>
+			<td>Name:</td>
+			<td><div id="get_name"></div></td>
+		  </tr>
+            <tr>
+			<td>Id:</td>
+			<td><div id="get_id"></div></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Attendance Subject 1:</td>
+			<td><div id="get_sub1"></div></td>
+		  </tr>
+		  <tr>
+			<td>Attendance Subject 2:</td>
+			<td><div id="get_sub2"></div></td>
+		  </tr>
+		  <tr>
+			<td>Attendance Subject 3:</td>
+			<td><div id="get_sub3"></div></td>
+		  </tr>
+		</table>
+        </form>     
+        <h3>Calculate average:</h3>
+        <form>
+		<table style="width:25%">
+            <tr><td><input type="button" onclick="get_avg()" value="Get Average"></td></tr>
+		  <tr>
+			<td>Name:</td>
+			<td><div id="get_name1"></div></td>
+		  </tr>
+		  <tr>
+			<td>Id:</td>
+			<td><div id="get_id1"></div></td>
+		  </tr>
+		  <tr>
+			<td>Average Attendance:</td>
+			<td><div id="get_avg"></div></td>
+		  </tr>
+		  </table>
+        </form> 
+    </body>
+</html>
