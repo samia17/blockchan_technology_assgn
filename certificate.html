@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>Certificate Dapp</title>
+</head>
+    <body>
+        <h1>Certificate DApp</h1>
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+    <script>	
+	
+	var account;
+	window.addEventListener('load', async () => {
+
+	
+		if (typeof window.ethereum !== 'undefined') { 
+			console.log("MetaMask is Available :) !"); 
+			}
+			
+		// Modern DApp browsers
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			
+			// To prevent the page reloading when the MetaMask network changes
+			ethereum.autoRefreshOnNetworkChange = false;
+			
+			// To Capture the account details from MetaMask
+			const accounts = await ethereum.enable();
+			account = accounts[0];
+				
+			}
+		// Legacy DApp browsers
+		else if (window.web3) {
+			//window.web3 = new Web3(web3.currentProvider);
+			window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/cbd9dc11b30147e9a2cc974be655ef7c")); 
+			}
+		// Non-DApp browsers
+		else {
+			console.log('Non-Ethereum browser detected. Please install MetaMask');
+			}
+			
+			});
+    	
+        var abi =[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "id",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "issue",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "expiry",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "auth",
+				"type": "string"
+			}
+		],
+		"name": "cert_details",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "show_details",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+        var contractaddress = '0xFdBd9931a8D6Cce7fcB4f2235aB87557557D65e7';
+        function add_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            var id = document.getElementById("id1").value;
+            var name = document.getElementById("name1").value;
+            var issue = document.getElementById("issue1").value;
+            var expiry = document.getElementById("expiry1").value;
+            var auth = document.getElementById("auth1").value;
+            
+             var result = myContract.methods.cert_details(id,name,issue,expiry,auth).send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result").innerHTML = result; }
+               
+                });
+        }
+        function get_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.show_details().call(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { 
+                    document.getElementById("get_name").innerHTML = result[1]; 
+                     document.getElementById("get_id").innerHTML = result[0];
+                     document.getElementById("get_issue").innerHTML = result[2];
+                     document.getElementById("get_expiry").innerHTML = result[3];
+                     document.getElementById("get_auth").innerHTML = result[4];
+                }
+               
+                });
+        }
+        </script>
+
+        <h3>Certificate Details:</h3>
+		<br>
+    <form>
+		<table style="width:25%"> 
+            <tr>
+			<td>Certificate Id:</td>
+			<td><input type="text" id="id1" name="id1"></td>
+		  </tr>
+            <tr>
+			<td>Certificate Holder Name:</td>
+			<td><input type="text" id="name1" name="name1"></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Date of Issue:</td>
+			<td><input type="text" id="issue1" name="issue1"></td>
+		  </tr>
+		  <tr>
+			<td>Date of Expiry:</td>
+			<td><input type="text" id="expiry1" name="expiry1"></td>
+		  </tr> 
+            <tr>
+			<td>Issuing Authority:</td>
+			<td><input type="text" id="auth1" name="auth1"></td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="add_details()" value="Add Details"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result"></div></a></h4> 
+	</form>
+        <h3>Show Certificate Details:</h3>
+        <form>
+		<table style="width:25%">
+		  <tr><td><input type="button" onclick="get_details()" value="Get Details"></td></tr>
+		  <tr>
+			<td>Certificate Id:</td>
+			<td><div id="get_id"></div></td>
+		  </tr>
+            <tr>
+			<td>Certificate Holder Name:</td>
+			<td><div id="get_name"></div></td>
+		  </tr>
+		  
+		  <tr>
+			<td>Date of Issue:</td>
+			<td><div id="get_issue"></div></td>
+		  </tr>
+		  <tr>
+			<td>Date of Expiry:</td>
+			<td><div id="get_expiry"></div></td>
+		  </tr>
+		  <tr>
+			<td>Issuing Authority:</td>
+			<td><div id="get_auth"></div></td>
+		  </tr>
+		</table>
+        </form>     
+    </body>
+</html>
