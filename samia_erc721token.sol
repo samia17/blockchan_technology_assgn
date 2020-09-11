@@ -6,13 +6,6 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
  
 
-/**
- * @title MyERC721Token
- * @author Ramaguru Radhakrishnan
- */
-
- 
-
 contract MyERC721Token is ERC721 {
     
     /**
