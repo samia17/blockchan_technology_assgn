@@ -1,0 +1,348 @@
+<html>
+<head>
+<title>Using Provable</title>
+</head>
+    <body>
+        <h1>PROVABLE QUERIES</h1>
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+    <script>	
+	
+	var account;
+	window.addEventListener('load', async () => {
+
+	
+		if (typeof window.ethereum !== 'undefined') { 
+			console.log("MetaMask is Available :) !"); 
+			}
+			
+		// Modern DApp browsers
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			
+			// To prevent the page reloading when the MetaMask network changes
+			ethereum.autoRefreshOnNetworkChange = false;
+			
+			// To Capture the account details from MetaMask
+			const accounts = await ethereum.enable();
+			account = accounts[0];
+				
+			}
+		// Legacy DApp browsers
+		else if (window.web3) {
+			//window.web3 = new Web3(web3.currentProvider);
+			window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/cbd9dc11b30147e9a2cc974be655ef7c")); 
+			}
+		// Non-DApp browsers
+		else {
+			console.log('Non-Ethereum browser detected. Please install MetaMask');
+			}
+			
+			});
+    	
+    	
+        var abi = [
+	{
+		"inputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			}
+		],
+		"name": "LogNewProvableQuery",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "views",
+				"type": "string"
+			}
+		],
+		"name": "LogResults",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_ipfshash",
+				"type": "string"
+			}
+		],
+		"name": "IPFS",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_query",
+				"type": "string"
+			}
+		],
+		"name": "WolframAlpha",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "_myid",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "string",
+				"name": "_result",
+				"type": "string"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "_myid",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "string",
+				"name": "_result",
+				"type": "string"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_proof",
+				"type": "bytes"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_query",
+				"type": "string"
+			}
+		],
+		"name": "blockchain",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "computation",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "result",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "results",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "url",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	}
+]
+        var contractaddress = '0x4daBEb7d19C5BD467B6a6Db2763F1163b793ca6b';
+        function block_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            var query = document.getElementById("bc").value;
+             var result = myContract.methods.blockchain(query).send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result0").innerHTML = result; }
+               
+                });
+        }
+        function ipfs_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            var ipfs = document.getElementById("hash").value;
+             var result = myContract.methods.IPFS(ipfs).send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result1").innerHTML = result; }
+               
+                });
+        }
+        function wolf_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            var alpha = document.getElementById("wolf").value;
+             var result = myContract.methods.WolframAlpha(alpha).send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result2").innerHTML = result; }
+               
+                });
+        }
+        function url_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.url().send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result3").innerHTML = result; }
+               
+                });
+        }
+        function comp_details() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.computation().send(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { document.getElementById("result4").innerHTML = result; }
+               
+                });
+        }
+         function get_res() {
+            var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+             var result = myContract.methods.results().call(function (err, result) {
+               
+                if (err) { console.log(err); }
+                if (result) { 
+                    document.getElementById("get_result").innerHTML = result; }
+               
+                });
+        }
+        </script>
+    <form>
+		<table style="width:30%"> 
+            <tr>
+			<td>Enter your Blockchain query:</td>
+			<td><input type="text" id="bc" name="bc1"></td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="block_details()" value="Send Query"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result0"></div></a></h4> 
+	</form>
+        <form>
+		<table style="width:30%"> 
+            <tr>
+			<td>Enter your IPFS hash value:</td>
+			<td><input type="text" id="hash" name="hash1"></td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="ipfs_details()" value="Send Query"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result1"></div></a></h4> 
+	</form>
+        <form>
+		<table style="width:30%"> 
+            <tr>
+			<td>Enter your WolframAlpha query:</td>
+			<td><input type="text" id="wolf" name="wolf1"></td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="wolf_details()" value="Send Query"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result2"></div></a></h4> 
+	</form>
+         <form>
+		<table style="width:25%"> 
+            <tr>
+			<td>Send url query:</td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="url_details()" value="Send Query"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result3"></div></a></h4> 
+	</form>
+         <form>
+		<table style="width:25%"> 
+            <tr>
+			<td>Send computation query:</td>
+		  </tr>
+		  <tr>
+		  <td><input type="button" onclick="comp_details()" value="Send Query"></td>
+		  </tr>
+		</table>
+		
+		<h4> Transaction Id: <a href=""><div id="result4"></div></a></h4> 
+	</form>
+        <form>
+		<table style="width:25%">
+            <tr><td><input type="button" onclick="get_res()" value="Get Result"></td></tr>
+		  <tr>
+			<td>Result:</td>
+			<td><div id="get_result"></div></td>
+		  </tr>
+		  </table>
+        </form> 
+    </body>
+</html>
