@@ -1,4 +1,5 @@
 # blockchan_technology_assgn
+[credential](credential.html)
 [oracle](oracle.html)
 
 [samc_token_with_owner](samc_with_owner.html)
