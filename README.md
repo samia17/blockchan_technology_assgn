@@ -1,4 +1,6 @@
 # blockchan_technology_assgn
+[token_with_cert](token_with_cert.html)
+
 [credential](credential.html)
 
 
