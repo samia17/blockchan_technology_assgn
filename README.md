@@ -1,4 +1,6 @@
 # blockchan_technology_assgn
+[student_attendance_erc721token](student_attendance_erctoken.html)
+
 [token_with_cert](token_with_cert.html)
 
 [credential](credential.html)
