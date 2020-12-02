@@ -1,4 +1,7 @@
 # blockchan_technology_assgn
+
+[medical_record_project](hospital.html)
+
 [student_attendance_erc721token](student_attendance_erctoken.html)
 
 [token_with_cert](token_with_cert.html)
